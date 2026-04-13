@@ -1,0 +1,94 @@
+import styles from "./About.module.css";
+
+export default function About() {
+  return (
+    <section className={styles.about} aria-label="About MATCON 2026">
+      <div className={styles.container}>
+        
+        {/* SECTION 1: THE CONFERENCE */}
+        <div className={styles.segment}>
+          <div className={styles.segment_meta}>
+            <span className={styles.meta_id}>01/08</span>
+            <span className={styles.meta_status}>// SYSTEM_ACTIVE</span>
+          </div>
+
+          <div className={styles.segment_content}>
+            <div className={styles.ghost_title}>CONFERENCE</div>
+            <h2 className={styles.title}>
+              MAT<span className={styles.title_hi}>CON</span> 2026
+            </h2>
+            
+            <div className={styles.body}>
+              <p>
+                MATCON 2026 is the <span className={styles.highlight}>8th international conference</span> of the prestigious MATCON series organized by the Department of Applied Chemistry, CUSAT.
+                As a vital component of the scientific community, the conference aims at exchanging and nurturing innovative ideas of the latest and cutting-edge research among the academicians, scientists and industrialists all over the world.
+              </p>
+              <p>
+                The 3-day international conference will be devoted to invited lectures by eminent academicians and scientists, oral presentations and poster presentations by researchers and budding scientists from various parts of the globe. MATCON-2026 is expected to foster transparent and equitable science for all.
+              </p>
+            </div>
+
+            <div className={styles.readout}>
+              <div className={styles.readout_item}>
+                <label>EDITION</label>
+                <div className={styles.readout_val}>08.INTL</div>
+              </div>
+              <div className={styles.readout_item}>
+                <label>DURATION</label>
+                <div className={styles.readout_val}>72_HOURS</div>
+              </div>
+              <div className={styles.readout_item}>
+                <label>AUDIENCE</label>
+                <div className={styles.readout_val}>500+_RES</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className={styles.conduit_v}></div>
+        </div>
+
+        {/* SECTION 2: THE DEPARTMENT */}
+        <div className={`${styles.segment} ${styles.segment_alt}`}>
+          <div className={styles.segment_meta}>
+            <span className={styles.meta_id}>02/08</span>
+            <span className={styles.meta_status}>// DEPT_PROFILE</span>
+          </div>
+
+          <div className={styles.segment_content}>
+            <div className={styles.ghost_title}>DEPARTMENT</div>
+            <h2 className={styles.title}>
+              APPLIED CHEMISTRY
+            </h2>
+            
+            <div className={styles.body}>
+              <p>
+                Established in <span className={styles.highlight}>1976</span> to play an important role in the further development of the industrial belt in the greater Cochin area by providing scientific support and trained personnel to the industries. 
+              </p>
+              <p>
+                The Department has now grown and emerged as one of the pioneering centers in Chemistry in the State of Kerala. The Department currently offers a five year Integrated M.Sc, two year M.Sc. and Ph.D. Programmes in Chemistry.
+              </p>
+            </div>
+
+            <div className={styles.readout}>
+              <div className={styles.readout_item}>
+                <label>FOUNDED</label>
+                <div className={styles.readout_val}>EST_1976</div>
+              </div>
+              <div className={styles.readout_item}>
+                <label>PROGRAMS</label>
+                <div className={styles.readout_val}>03_ACTIVE</div>
+              </div>
+              <div className={styles.readout_item}>
+                <label>LOCATION</label>
+                <div className={styles.readout_val}>KOCHI.IN</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className={styles.conduit_v}></div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
