@@ -10,6 +10,7 @@ export default function About() {
           <div className={styles.segment_meta}>
             <span className={styles.meta_id}>01/08</span>
             <span className={styles.meta_status}>// SYSTEM_ACTIVE</span>
+            <div className={styles.conduit_v}></div>
           </div>
 
           <div className={styles.segment_content}>
@@ -24,10 +25,17 @@ export default function About() {
                 As a vital component of the scientific community, the conference aims at exchanging and nurturing innovative ideas of the latest and cutting-edge research among the academicians, scientists and industrialists all over the world.
               </p>
               <p>
-                The 3-day international conference will be devoted to invited lectures by eminent academicians and scientists, oral presentations and poster presentations by researchers and budding scientists from various parts of the globe. MATCON-2026 is expected to foster transparent and equitable science for all.
+                The 3-day international conference will be devoted to invited lectures by eminent academicians and scientists, oral presentations and poster presentations by researchers and budding scientists from various parts of the globe.
               </p>
             </div>
+            
+            <div className={styles.decorative_marker}>
+              <span>SERIES_INDEX: VIII.26</span>
+              <span>ARCHIVE: MATCON_INTL</span>
+            </div>
+          </div>
 
+          <div className={styles.readout_panel}>
             <div className={styles.readout}>
               <div className={styles.readout_item}>
                 <label>EDITION</label>
@@ -43,8 +51,6 @@ export default function About() {
               </div>
             </div>
           </div>
-          
-          <div className={styles.conduit_v}></div>
         </div>
 
         {/* SECTION 2: THE DEPARTMENT */}
@@ -52,6 +58,7 @@ export default function About() {
           <div className={styles.segment_meta}>
             <span className={styles.meta_id}>02/08</span>
             <span className={styles.meta_status}>// DEPT_PROFILE</span>
+            <div className={styles.conduit_v}></div>
           </div>
 
           <div className={styles.segment_content}>
@@ -65,10 +72,17 @@ export default function About() {
                 Established in <span className={styles.highlight}>1976</span> to play an important role in the further development of the industrial belt in the greater Cochin area by providing scientific support and trained personnel to the industries. 
               </p>
               <p>
-                The Department has now grown and emerged as one of the pioneering centers in Chemistry in the State of Kerala. The Department currently offers a five year Integrated M.Sc, two year M.Sc. and Ph.D. Programmes in Chemistry.
+                The Department has now grown and emerged as one of the pioneering centers in Chemistry in the State of Kerala. The Department currently offers a five year Integrated M.Sc, two year M.Sc. and Ph.D. Programmes.
               </p>
             </div>
 
+            <div className={styles.decorative_marker}>
+              <span>INDEX: DEPT_APP_CHEM</span>
+              <span>EST_YEAR: 1976</span>
+            </div>
+          </div>
+
+          <div className={styles.readout_panel}>
             <div className={styles.readout}>
               <div className={styles.readout_item}>
                 <label>FOUNDED</label>
@@ -84,8 +98,6 @@ export default function About() {
               </div>
             </div>
           </div>
-          
-          <div className={styles.conduit_v}></div>
         </div>
 
       </div>

@@ -5,6 +5,8 @@
   --cell-border: rgba(255,255,255,0.08);
   --accent: #c8f04a;
   --text: #f2f2f2;
+  --text-muted: #a1a1aa;
+  --surface: #121217;
   
   --background: var(--bg);
   --foreground: var(--text);
@@ -14,7 +16,10 @@
   --color-background: var(--bg);
   --color-foreground: var(--text);
   --color-accent: var(--accent);
-  --font-sans: var(--font-dm-sans);
+  --color-muted: var(--text-muted);
+  --color-surface: var(--surface);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-outfit);
   --font-bebas: var(--font-bebas-neue);
 }
 

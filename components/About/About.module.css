@@ -41,9 +41,9 @@
 
 .segment {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 120px 1fr 280px; /* 3 Columns: Meta, Content, Readout */
   gap: 60px;
-  margin-bottom: 160px;
+  margin-bottom: 200px;
   position: relative;
 }
 
@@ -57,21 +57,23 @@
   flex-direction: column;
   gap: 12px;
   padding-top: 10px;
+  position: relative;
 }
 
 .meta_id {
   font-family: var(--font-mono, monospace);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--accent);
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 .meta_status {
   font-family: var(--font-mono, monospace);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
-  letter-spacing: 1px;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 /* ── Content Area ── */
@@ -85,19 +87,23 @@
   left: -20px;
   font-family: var(--font-bebas);
   font-size: 140px;
-  color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.08); /* Increased visibility */
   line-height: 1;
   pointer-events: none;
   z-index: 0;
   white-space: nowrap;
+  letter-spacing: 15px; /* Added spacing for conclave elegance */
+  text-transform: uppercase;
 }
 
 .title {
-  font-family: var(--font-bebas);
-  font-size: 72px;
+  font-family: var(--font-outfit, var(--font-display));
+  font-size: 80px;
+  font-weight: 700;
   color: #fff;
   margin-bottom: 40px;
-  line-height: 0.9;
+  line-height: 0.95;
+  letter-spacing: -1px;
   position: relative;
   z-index: 1;
 }
@@ -107,13 +113,26 @@
 }
 
 .body {
-  max-width: 700px;
-  font-size: 17px;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 60px;
+  max-width: 620px;
+  font-family: var(--font-inter, var(--font-sans));
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin-bottom: 40px;
   position: relative;
   z-index: 1;
+}
+
+.decorative_marker {
+  display: flex;
+  gap: 24px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--accent);
+  opacity: 0.5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 20px;
 }
 
 .highlight {
@@ -121,15 +140,38 @@
   font-weight: 600;
 }
 
-/* ── Technical Readout (Stats) ── */
+/* ── Technical Readout Panel (Vertical) ── */
+.readout_panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .readout {
   display: flex;
-  gap: 60px;
-  padding: 30px 40px;
+  flex-direction: column;
+  gap: 40px;
+  padding: 48px;
   background: rgba(255, 255, 255, 0.02);
-  border-left: 2px solid var(--accent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   position: relative;
   z-index: 1;
+}
+
+.readout::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
 }
 
 .readout_item {
@@ -139,16 +181,18 @@
 }
 
 .readout_item label {
+  font-family: var(--font-outfit, var(--font-display));
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  opacity: 0.6;
   text-transform: uppercase;
 }
 
 .readout_val {
-  font-family: var(--font-mono, monospace);
-  font-size: 20px;
+  font-family: var(--font-outfit, var(--font-display));
+  font-size: 22px;
   font-weight: 700;
   color: #fff;
   letter-spacing: 1px;
@@ -157,28 +201,36 @@
 /* ── Conduit Line ── */
 .conduit_v {
   position: absolute;
-  top: 0;
-  left: -60px;
+  top: 60px;
+  left: 0;
   width: 1px;
-  height: 150%;
-  background: linear-gradient(to bottom, var(--accent) 0%, rgba(200, 240, 74, 0) 100%);
+  height: calc(100% + 140px);
+  background: linear-gradient(to bottom, 
+    var(--accent) 0%, 
+    rgba(200, 240, 74, 0.1) 50%, 
+    transparent 100%
+  );
   opacity: 0.2;
 }
 
 /* ── Staggered Layout for Second Segment ── */
 .segment_alt {
-  grid-template-columns: 1fr 180px;
-  text-align: right;
+  grid-template-columns: 280px 1fr 120px;
 }
 
 .segment_alt .segment_meta {
-  grid-column: 2;
+  grid-column: 3;
   align-items: flex-end;
 }
 
 .segment_alt .segment_content {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
+  text-align: right;
+}
+
+.segment_alt .body {
+  margin-left: auto;
 }
 
 .segment_alt .ghost_title {
@@ -186,20 +238,24 @@
   right: -20px;
 }
 
-.segment_alt .body {
-  margin-left: auto;
+.segment_alt .decorative_marker {
+  justify-content: flex-end;
+}
+
+.segment_alt .readout_panel {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .segment_alt .readout {
-  justify-content: flex-end;
   border-left: none;
   border-right: 2px solid var(--accent);
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.2);
 }
 
 .segment_alt .conduit_v {
   left: auto;
-  right: -60px;
-  background: linear-gradient(to bottom, var(--accent) 0%, rgba(200, 240, 74, 0) 100%);
+  right: 0;
 }
 
 /* Responsive */
@@ -232,7 +288,9 @@
   }
 
   .readout {
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 30px;
+    padding: 24px;
   }
 }
