@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+/* update for vercel - 1 */
 :root {
   --bg: #141418;
   --cell-border: rgba(255,255,255,0.08);
