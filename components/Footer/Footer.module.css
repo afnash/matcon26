@@ -1,0 +1,223 @@
+.footer {
+  padding: 100px 60px 80px;
+  background: var(--bg);
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.details_grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 1fr 2fr;
+  gap: 50px;
+  margin-bottom: 80px;
+}
+
+
+.details_block {
+  display: flex;
+  flex-direction: column;
+}
+
+.details_title {
+  font-family: var(--font-bebas);
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* Contact & Address */
+.address {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+}
+
+.address p {
+  margin-bottom: 4px;
+}
+
+.contact_info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact_link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact_link:hover {
+  color: var(--accent);
+}
+
+.contact_link svg {
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* Branding */
+.uni_branding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.uni_logo_container {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  margin-bottom: -10px; /* Adjusting for name spacing */
+}
+
+.uni_logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+}
+
+
+
+.uni_name {
+  font-family: var(--font-bebas);
+  font-size: 24px;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+/* Quick Links */
+.quick_links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick_links a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.quick_links a:hover {
+  color: var(--accent);
+  padding-left: 5px;
+}
+
+/* Social Links */
+.social_links {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.social_links a {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.social_links a:hover {
+  background: var(--accent);
+  color: #000;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(200, 240, 74, 0.2);
+}
+
+/* Map */
+.map_wrapper {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.map_iframe {
+  display: block;
+  filter: none; /* Light theme restored */
+  opacity: 1;
+}
+
+/* Bottom */
+.footer_bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 40px;
+  text-align: center;
+}
+
+.copyright {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .details_grid {
+    grid-template-columns: 1.2fr 1.5fr 1fr 1.5fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .details_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 80px 40px;
+  }
+  .details_grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
+  }
+  .details_block {
+    align-items: center;
+  }
+  .contact_link {
+    justify-content: center;
+  }
+  .social_links {
+    justify-content: center;
+  }
+  .uni_name {
+    font-size: 20px;
+  }
+  .map_wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+

@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero/Hero";
 import About from "@/components/About/About";
 import Speakers from "@/components/Speakers/Speakers";
+import Footer from "@/components/Footer/Footer";
 import MatrixRain from "@/components/MatrixRain";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <Hero />
         <About />
         <Speakers />
+        <Footer />
       </main>
     </>
   );

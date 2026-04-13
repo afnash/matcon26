@@ -1,25 +1,39 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import styles from "./About.module.css";
 
 const THEMES = [
-  "Green and Sustainable Chemistry",
-  "Smart framework materials",
-  "Energy and Photovoltaics",
-  "Frontiers in Computational Modelling and AI",
-  "Polymer Science and Engineering",
-  "Materials for Space Technology",
-  "Supramolecular Materials and Assemblies",
-  "Sensors and Biosensors",
-  "Next generation Nanomaterials",
-  "Nanomaterials for Biomedical Applications",
-  "Drug Discovery and Drug Delivery",
-  "Emerging Techniques in Spectroscopy",
-  "Catalysis and Synthetic Organic Chemistry",
-  "Advanced Functional Materials",
-  "Nuclear Materials",
-  "Separation Science and Technology"
+  { name: "Green and Sustainable Chemistry", symbol: "Gs" },
+  { name: "Smart framework materials", symbol: "Sf" },
+  { name: "Energy and Photovoltaics", symbol: "Ep" },
+  { name: "Frontiers in Computational Modelling and AI", symbol: "Fa" },
+  { name: "Polymer Science and Engineering", symbol: "Ps" },
+  { name: "Materials for Space Technology", symbol: "Ms" },
+  { name: "Supramolecular Materials and Assemblies", symbol: "Sa" },
+  { name: "Sensors and Biosensors", symbol: "Sb" },
+  { name: "Next generation Nanomaterials", symbol: "Nn" },
+  { name: "Nanomaterials for Biomedical Applications", symbol: "Nb" },
+  { name: "Drug Discovery and Drug Delivery", symbol: "Dd" },
+  { name: "Emerging Techniques in Spectroscopy", symbol: "Et" },
+  { name: "Catalysis and Synthetic Organic Chemistry", symbol: "Co" },
+  { name: "Advanced Functional Materials", symbol: "Am" },
+  { name: "Nuclear Materials", symbol: "Nm" },
+  { name: "Separation Science and Technology", symbol: "St" }
 ];
 
 export default function About() {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIdx = Math.floor(Math.random() * THEMES.length);
+      setActiveIdx(nextIdx);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className={styles.about} aria-label="About MATCON 2026">
       <div className={styles.container}>
@@ -132,14 +146,26 @@ export default function About() {
 
           <div className={styles.themes_grid}>
             {THEMES.map((theme, idx) => (
-              <div key={idx} className={styles.theme_card}>
-                <span className={styles.theme_index}>T_{String(idx + 1).padStart(2, '0')}</span>
-                <h3 className={styles.theme_name}>{theme}</h3>
+              <div 
+                key={idx} 
+                className={`${styles.theme_card} ${activeIdx === idx ? styles.active : ""}`}
+              >
+                <div className={styles.cell_decoration}></div>
+                <div className={styles.cell_top}>
+                  <span className={styles.atomic_number}>{idx + 1}</span>
+                  <span className={styles.atomic_weight}>20.26</span>
+                </div>
+                <div className={styles.cell_main}>
+                  <div className={styles.symbol}>{theme.symbol}</div>
+                  <h3 className={styles.theme_name}>{theme.name}</h3>
+                </div>
                 <div className={styles.theme_accent}></div>
               </div>
             ))}
           </div>
         </div>
+
+
 
       </div>
     </section>
