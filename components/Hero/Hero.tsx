@@ -7,14 +7,26 @@ import Ballpit from "../Ballpit";
 export default function Hero() {
   return (
     <section className={styles.hero} aria-label="MATCON 2026 Hero Section">
-      {/* Ballpit Background */}
+      {/* Ballpit Background — hidden on mobile via CSS */}
       <div className={styles.backgroundContainer}>
         <Ballpit
-          count={100}
+          count={125}
           gravity={0.1}
           friction={0.9975}
           wallBounce={0.95}
           followCursor={false}
+        />
+      </div>
+
+      {/* Video Background — shown only on mobile (≤425px) via CSS */}
+      <div className={styles.videoContainer}>
+        <video
+          className={styles.bgVideo}
+          src="/hero/ballpits_hero_video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
       </div>
 

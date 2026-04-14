@@ -267,9 +267,35 @@
     margin-bottom: 100px;
   }
 
+  /* Reset all alt-segment grid overrides so items stack top-to-bottom */
   .segment_alt .segment_meta {
     grid-column: 1;
+    grid-row: unset;
     align-items: flex-start;
+  }
+
+  .segment_alt .segment_content {
+    grid-column: 1;
+    grid-row: unset;
+    text-align: left;
+  }
+
+  .segment_alt .body {
+    margin-left: 0;
+  }
+
+  .segment_alt .ghost_title {
+    left: -20px;
+    right: auto;
+  }
+
+  .segment_alt .decorative_marker {
+    justify-content: flex-start;
+  }
+
+  .segment_alt .readout_panel {
+    grid-column: 1;
+    grid-row: unset;
   }
 
   .segment_alt .readout {

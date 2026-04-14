@@ -148,10 +148,19 @@
   }
 }
 
+/* Tablet: minimum 2 cards per row */
 @media (max-width: 900px) {
   .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 480px) {
+  .grid {
     grid-template-columns: 1fr;
-    gap: 80px;
+    gap: 60px;
   }
 }
 
