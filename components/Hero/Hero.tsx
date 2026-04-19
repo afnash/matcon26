@@ -2,6 +2,7 @@
 
 import React from "react";
 import styles from "./Hero.module.css";
+import Link from "next/link";
 import Ballpit from "../Ballpit";
 
 export default function Hero() {
@@ -64,10 +65,15 @@ export default function Hero() {
         </h1>
 
         <p className={styles.dates}>15, 16, 17 December 2026</p>
-
-        <a href="#" className={styles.btn}>
-          Download Brochure
-        </a>
+        
+        <div className={styles.actions}>
+          <Link href="/register" className={styles.btn}>
+            Register
+          </Link>
+          <a href="#" className={styles.btnSecondary}>
+            Download Brochure
+          </a>
+        </div>
       </div>
 
       {/* Decorative Bottom Transition */}

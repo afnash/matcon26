@@ -95,7 +95,14 @@
   animation: fadeInUp 1s ease-out 0.3s both;
 }
 
-.btn {
+.actions {
+  display: flex;
+  gap: 20px;
+  animation: fadeInUp 1s ease-out 0.6s both;
+  pointer-events: all;
+}
+
+.btn, .btnSecondary {
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
@@ -103,17 +110,21 @@
   text-transform: uppercase;
   background: var(--accent);
   color: #000;
-  padding: 18px 52px;
+  padding: 18px 0;
+  width: 240px;
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.3s ease;
   box-shadow: 0 0 30px rgba(200, 240, 74, 0.25);
-  animation: fadeInUp 1s ease-out 0.6s both;
-  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
 }
 
-.btn:hover {
+.btn:hover, .btnSecondary:hover {
   background: #fff;
+  border-color: #fff;
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2);
 }
@@ -181,5 +192,18 @@
 
   .videoContainer {
     display: block;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+    gap: 12px;
+  }
+
+  .btn, .btnSecondary {
+    padding: 16px 0;
+    width: 100%;
+    max-width: 280px;
   }
 }

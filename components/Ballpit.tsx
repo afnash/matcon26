@@ -1,3 +1,5 @@
+'use client';
+
 import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import React, { useEffect, useRef } from 'react';
@@ -75,9 +77,9 @@ class X {
   };
 
   render: () => void = this.#render.bind(this);
-  onBeforeRender: (state: { elapsed: number; delta: number }) => void = () => {};
-  onAfterRender: (state: { elapsed: number; delta: number }) => void = () => {};
-  onAfterResize: (size: SizeData) => void = () => {};
+  onBeforeRender: (state: { elapsed: number; delta: number }) => void = () => { };
+  onAfterRender: (state: { elapsed: number; delta: number }) => void = () => { };
+  onAfterResize: (size: SizeData) => void = () => { };
   isDisposed: boolean = false;
 
   constructor(config: XConfig) {
@@ -117,24 +119,127 @@ class X {
     if (!this.canvas) return;
     this.canvas.style.display = 'block';
 
+    // Acquire the WebGL context ourselves so we can patch it before
+    // handing it to three.js. getShaderPrecisionFormat() returns null on
+    // some GPUs/drivers and three.js crashes trying to read .precision on it.
+    const contextAttribs = {
+      antialias: this.#config.rendererOptions?.antialias ?? true,
+      alpha: this.#config.rendererOptions?.alpha ?? true,
+      powerPreference: 'high-performance' as const,
+    };
+
+    const gl =
+      (this.canvas.getContext('webgl2', contextAttribs) as WebGL2RenderingContext | null) ||
+      (this.canvas.getContext('webgl', contextAttribs) as WebGLRenderingContext | null);
+
+    if (!gl) {
+      console.warn('Ballpit: WebGL not supported in this environment. Falling back to empty state.');
+      return;
+    }
+
+    // Patch BEFORE handing context to Three.js — it calls getShaderPrecisionFormat
+    // during construction and crashes if it returns null.
+    const _orig = gl.getShaderPrecisionFormat.bind(gl);
+    (gl as any).getShaderPrecisionFormat = (shaderType: number, precisionType: number) => {
+      const result = _orig(shaderType, precisionType);
+      return result ?? { rangeMin: 1, rangeMax: 1, precision: 1 };
+    };
+
+    // Patch: getContextAttributes can also return null in some buggy environments, 
+    // causing three.js to crash when trying to read its properties like .alpha.
+    const _origAttribs = gl.getContextAttributes.bind(gl);
+    (gl as any).getContextAttributes = () => {
+      const res = _origAttribs();
+      return res ?? { 
+        alpha: contextAttribs.alpha, 
+        antialias: contextAttribs.antialias,
+        premultipliedAlpha: true,
+        stencil: true,
+        depth: true
+      };
+    };
+
+    // Some buggy drivers return null for core context parameters during
+    // renderer bootstrap. three.js assumes these values are always present.
+    const getDefaultViewport = () =>
+      new Int32Array([
+        0,
+        0,
+        this.canvas.width || this.canvas.clientWidth || 1,
+        this.canvas.height || this.canvas.clientHeight || 1
+      ]);
+
+    const _origGetParameter = gl.getParameter.bind(gl);
+    (gl as any).getParameter = (parameter: number) => {
+      const result = _origGetParameter(parameter);
+      if (result != null) return result;
+
+      switch (parameter) {
+        case gl.VERSION:
+          return 'WebGL 2.0';
+        case gl.SHADING_LANGUAGE_VERSION:
+          return 'WebGL GLSL ES 3.00';
+        case gl.VENDOR:
+        case gl.RENDERER:
+        case 37445: // UNMASKED_VENDOR_WEBGL
+        case 37446: // UNMASKED_RENDERER_WEBGL
+          return 'Unknown';
+        case gl.SCISSOR_BOX:
+        case gl.VIEWPORT:
+          return getDefaultViewport();
+        default:
+          return result;
+      }
+    };
+
+
+    const _origGetShaderInfoLog = gl.getShaderInfoLog?.bind(gl);
+    if (_origGetShaderInfoLog) {
+      (gl as any).getShaderInfoLog = (...args: Parameters<typeof _origGetShaderInfoLog>) =>
+        _origGetShaderInfoLog(...args) ?? '';
+    }
+
+    const _origGetProgramInfoLog = gl.getProgramInfoLog?.bind(gl);
+    if (_origGetProgramInfoLog) {
+      (gl as any).getProgramInfoLog = (...args: Parameters<typeof _origGetProgramInfoLog>) =>
+        _origGetProgramInfoLog(...args) ?? '';
+    }
+
+    // Intercept getExtension to suppress noisy "not supported" warnings from Three.js.
+    //
+    // Three.js prints console.warn() itself when it gets null back for certain
+    // extensions it *tries* to use (like EXT_color_buffer_float for HDR PMREM
+    // and WEBGL_lose_context for clean disposal). We preemptively short-circuit
+    // known-problematic extensions so Three.js never reaches its own warning path.
+    //
+    // Extensions suppressed:
+    //   EXT_color_buffer_float  — needed by PMREMGenerator for float render targets;
+    //                             Three.js falls back to HalfFloat/UnsignedByte automatically.
+    //   WEBGL_lose_context      — used by renderer.forceContextLoss(); we guard that
+    //                             call site separately below.
+    const SUPPRESSED_EXTENSIONS = new Set([
+      'EXT_color_buffer_float',
+      'WEBGL_lose_context',
+    ]);
+    const _origGetExtension = gl.getExtension.bind(gl);
+    (gl as any).getExtension = (name: string) => {
+      if (SUPPRESSED_EXTENSIONS.has(name)) return null; // silent null — no Three.js warning
+      return _origGetExtension(name);
+    };
+
     const rendererOptions: WebGLRendererParameters = {
       canvas: this.canvas,
-      powerPreference: 'high-performance',
+      context: gl,
+      antialias: contextAttribs.antialias,  // ← must be explicit alongside context
+      alpha: contextAttribs.alpha,       // ← this was the missing piece before
       ...(this.#config.rendererOptions ?? {})
     };
 
     try {
-      // Check if WebGL is available before trying to create it
-      const gl = this.canvas.getContext('webgl2') || this.canvas.getContext('webgl');
-      if (!gl) {
-        throw new Error('WebGL not supported');
-      }
-
       this.renderer = new WebGLRenderer(rendererOptions);
       this.renderer.outputColorSpace = SRGBColorSpace;
     } catch (e) {
       console.warn('Ballpit: WebGL initialization failed. Falling back to empty state.', e);
-      // We don't initialize this.renderer, but we mark the instance as potentially broken
     }
   }
 
@@ -297,7 +402,9 @@ class X {
     this.clear();
     this.#postprocessing?.dispose();
     this.renderer?.dispose();
-    this.renderer?.forceContextLoss();
+    // forceContextLoss requires the WEBGL_lose_context extension.
+    // We suppress that extension for low-end compatibility, so guard the call.
+    try { this.renderer?.forceContextLoss(); } catch { /* extension unavailable — skip */ }
     this.isDisposed = true;
   }
 
@@ -547,10 +654,10 @@ function createPointerData(options: Partial<PointerData> & { domElement: HTMLEle
     nPosition: new Vector2(),
     hover: false,
     touching: false,
-    onEnter: () => {},
-    onMove: () => {},
-    onClick: () => {},
-    onLeave: () => {},
+    onEnter: () => { },
+    onMove: () => { },
+    onClick: () => { },
+    onLeave: () => { },
     ...options
   };
   if (!pointerMap.has(options.domElement)) {
@@ -704,12 +811,23 @@ class Z extends InstancedMesh {
 
   constructor(renderer: WebGLRenderer, params: Partial<typeof XConfig> = {}) {
     const config = { ...XConfig, ...params };
-    const roomEnv = new RoomEnvironment();
-    const pmrem = new PMREMGenerator(renderer);
-    const envTexture = pmrem.fromScene(roomEnv).texture;
+    let envTexture;
+
+    try {
+      const roomEnv = new RoomEnvironment();
+      const pmrem = new PMREMGenerator(renderer);
+      envTexture = pmrem.fromScene(roomEnv).texture;
+      pmrem.dispose();
+      (roomEnv as RoomEnvironment & { dispose?: () => void }).dispose?.();
+    } catch (error) {
+      console.warn('Ballpit: Failed to build environment map. Rendering without PMREM.', error);
+    }
+
     const geometry = new SphereGeometry();
-    const material = new Y({ envMap: envTexture, ...config.materialParams });
-    material.envMapRotation.x = -Math.PI / 2;
+    const material = new Y({ ...(envTexture ? { envMap: envTexture } : {}), ...config.materialParams });
+    if (envTexture) {
+      material.envMapRotation.x = -Math.PI / 2;
+    }
     super(geometry, material, config.count);
     this.config = config;
     this.physics = new W(config);
@@ -803,11 +921,15 @@ function createBallpit(canvas: HTMLCanvasElement, config: any = {}): CreateBallp
     return {
       three: threeInstance,
       spheres: null as any,
-      setCount: () => {},
-      togglePause: () => {},
+      setCount: () => { },
+      togglePause: () => { },
       dispose: () => threeInstance.dispose()
     };
   }
+
+  // Cap pixel ratio at 2 — on 3x screens (many Android/iOS devices) rendering
+  // at full DPR is 2.25× more expensive than at 2x with minimal visual gain.
+  threeInstance.maxPixelRatio = 2;
 
   let spheres: Z;
   threeInstance.renderer.toneMapping = ACESFilmicToneMapping;
